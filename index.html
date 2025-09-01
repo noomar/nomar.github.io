@@ -1,48 +1,642 @@
-html
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AI Video & Story Studio</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-    }
-    h1 {
-      color: #0ff;
-    }
-    p {
-      max-width: 400px;
-      margin-bottom: 20px;
-    }
-    button {
-      padding: 12px 24px;
-      font-size: 16px;
-      background: #0ff;
-      color: #000;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #0cc;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZekaAI - Ücretsiz Yapay Zeka Platformu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #7209b7;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --gradient: linear-gradient(135deg, #4361ee, #3a0ca3, #7209b7);
+        }
+        
+        body {
+            background: var(--gradient);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .header {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .logo i {
+            color: var(--success);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+        
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--success);
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--light);
+            color: var(--light);
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: var(--light);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            padding: 30px 20px;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            margin-bottom: 40px;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #4cc9f0, #4361ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: var(--success);
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .demo-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            color: var(--dark);
+            margin-bottom: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .demo-section h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--secondary);
+        }
+        
+        .chat-container {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: #f9f9f9;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        
+        .user-message {
+            background: var(--primary);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .ai-message {
+            background: #e6e6e6;
+            color: #333;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+        
+        #userInput {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            resize: none;
+            height: 60px;
+        }
+        
+        #sendBtn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .pricing {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .pricing h2 {
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+        }
+        
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .pricing-card.free {
+            border: 2px solid var(--success);
+        }
+        
+        .price {
+            font-size: 2.5rem;
+            margin: 15px 0;
+            color: var(--success);
+        }
+        
+        .pricing-card ul {
+            list-style: none;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .pricing-card li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .pricing-card li i {
+            color: var(--success);
+        }
+        
+        .faq {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            color: var(--dark);
+            margin-bottom: 50px;
+        }
+        
+        .faq h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--secondary);
+        }
+        
+        .faq-item {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+        
+        .faq-question {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .footer {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 40px 5%;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            text-align: left;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            color: var(--success);
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column a:hover {
+            color: var(--success);
+        }
+        
+        .copyright {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .nav-links {
+                gap: 15px;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .features, .pricing-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-area {
+                flex-direction: column;
+            }
+            
+            #sendBtn {
+                width: 100%;
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>AI Video & Story Studio</h1>
-  <p>Sadece metin girin, gerisini yapay zekaya bırakın! Gerçek ses, video, görsel ve altyazı otomatik olarak oluşturulsun.</p>
-  <button onclick="alert('Yakında aktif olacak!')">Projeye Başla</button>
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-brain"></i>
+            <span>ZekaAI</span>
+        </div>
+        
+        <nav class="nav-links">
+            <a href="#">Ana Sayfa</a>
+            <a href="#">Özellikler</a>
+            <a href="#">Fiyatlandırma</a>
+            <a href="#">API</a>
+            <a href="#">Topluluk</a>
+        </nav>
+        
+        <div class="auth-buttons">
+            <button class="btn btn-outline">Giriş Yap</button>
+            <button class="btn btn-primary">Kayıt Ol</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="hero">
+            <h1>Herkes İçin Ücretsiz Yapay Zeka</h1>
+            <p>ZekaAI, güçlü yapay zeka yeteneklerini herkesin kullanımına sunan tamamen ücretsiz bir platformdur. Sınırlama yok, gizli maliyet yok.</p>
+            <button class="btn btn-primary" style="padding: 15px 30px; font-size: 1.1rem;">Hemen Başla</button>
+        </section>
+        
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>Gelişmiş Yapay Zeka</h3>
+                <p>Doğal dil işleme, metin üretimi ve daha birçok yapay zeka özelliğinden yararlanın.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3>Sürekli Öğrenme</h3>
+                <p>Yapay zeka modelimiz kullanıcı etkileşimleriyle sürekli olarak kendini geliştirir.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-lock-open"></i>
+                </div>
+                <h3>Tamamen Açık Kaynak</h3>
+                <p>Platformumuz tamamen açık kaynaklıdır ve topluluk tarafından geliştirilmektedir.</p>
+            </div>
+        </section>
+        
+        <section class="demo-section">
+            <h2>Yapay Zeka'yı Hemen Deneyin</h2>
+            <div class="chat-container" id="chatContainer">
+                <div class="message ai-message">
+                    Merhaba! Ben ZekaAI, size nasıl yardımcı olabilirim?
+                </div>
+            </div>
+            <div class="input-area">
+                <textarea id="userInput" placeholder="Buraya mesajınızı yazın..."></textarea>
+                <button id="sendBtn">Gönder</button>
+            </div>
+        </section>
+        
+        <section class="pricing">
+            <h2>Herkes İçin Ücretsiz</h2>
+            <div class="pricing-cards">
+                <div class="pricing-card free">
+                    <h3>Ücretsiz Plan</h3>
+                    <div class="price">₺0</div>
+                    <p>Her zaman ücretsiz, hiçbir kredi kartı gerekmez</p>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Sınırsız yapay zeka sorgusu</li>
+                        <li><i class="fas fa-check"></i> Temel özelliklere tam erişim</li>
+                        <li><i class="fas fa-check"></i> Topluluk desteği</li>
+                        <li><i class="fas fa-check"></i> API erişimi</li>
+                        <li><i class="fas fa-check"></i> Açık kaynak kod</li>
+                    </ul>
+                    <button class="btn btn-primary">Hemen Başla</button>
+                </div>
+                
+                <div class="pricing-card">
+                    <h3>Premium Destek</h3>
+                    <div class="price">İsteğe Bağlı</div>
+                    <p>Ekstra kaynaklar ve öncelikli destek için</p>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Öncelikli işlem gücü</li>
+                        <li><i class="fas fa-check"></i> Özel model eğitimi</li>
+                        <li><i class="fas fa-check"></i> Doğrudan geliştirici desteği</li>
+                        <li><i class="fas fa-check"></i> Özelleştirilmiş çözümler</li>
+                        <li><i class="fas fa-check"></i> Özel API anahtarları</li>
+                    </ul>
+                    <button class="btn btn-outline" style="color: var(--dark); border-color: var(--dark);">Daha Fazla Bilgi</button>
+                </div>
+            </div>
+        </section>
+        
+        <section class="faq">
+            <h2>Sıkça Sorulan Sorular</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">Bu platform gerçekten tamamen ücretsiz mi?</div>
+                <div class="faq-answer">Evet, ZekaAI tamamen ücretsizdir. Temel özellikler için hiçbir ücret talep etmiyoruz. Geliştirme ve barındırma maliyetlerini bağışlar ve gönüllü katkılarla karşılıyoruz.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Gizliliğim ve verilerim nasıl korunuyor?</div>
+                <div class="faq-answer">Veri gizliliği bizim için çok önemli. Kullanıcı verilerini asla üçüncü taraflarla paylaşmıyoruz. Platform açık kaynaklı olduğu için gizlilik politikamız şeffaftır.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Yapay zeka nasıl sürekli kendini geliştiriyor?</div>
+                <div class="faq-answer">Kullanıcı etkileşimlerinden anonimleştirilmiş veriler toplayarak modelimizi sürekli iyileştiriyoruz. Ayrıca topluluk katkılarıyla düzenli güncellemeler yayınlıyoruz.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Nasıl katkıda bulunabilirim?</div>
+                <div class="faq-answer">ZekaAI açık kaynaklı bir proje olduğu için kod yazabilir, hata bildirebilir, dokümantasyon oluşturabilir veya bağış yaparak katkıda bulunabilirsiniz.</div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>ZekaAI</h3>
+                <p>Herkes için ücretsiz yapay zeka platformu</p>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Bağlantılar</h3>
+                <ul>
+                    <li><a href="#">Ana Sayfa</a></li>
+                    <li><a href="#">Özellikler</a></li>
+                    <li><a href="#">API Dökümantasyonu</a></li>
+                    <li><a href="#">Topluluk</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Yasal</h3>
+                <ul>
+                    <li><a href="#">Gizlilik Politikası</a></li>
+                    <li><a href="#">Kullanım Şartları</a></li>
+                    <li><a href="#">Çerez Politikası</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>İletişim</h3>
+                <ul>
+                    <li><a href="#">Destek</a></li>
+                    <li><a href="#">İş Ortaklığı</a></li>
+                    <li><a href="#">Bağış Yap</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            &copy; 2023 ZekaAI - Tüm hakları açıktır, herkes kullanabilir
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatContainer = document.getElementById('chatContainer');
+            const userInput = document.getElementById('userInput');
+            const sendBtn = document.getElementById('sendBtn');
+            
+            // Basit yapay zeka yanıtları
+            const aiResponses = {
+                'merhaba': 'Merhaba! Ben ZekaAI, size nasıl yardımcı olabilirim?',
+                'nasılsın': 'Ben bir yapay zeka modeliyim, ama sorduğunuz için teşekkürler! Size nasıl yardımcı olabilirim?',
+                'teşekkür': 'Rica ederim! Başka nasıl yardımcı olabilirim?',
+                'ne yapabilirsin': 'Metin oluşturabilir, sorularınızı cevaplayabilir, fikir üretebilir ve çok daha fazlasını yapabilirim. Bana ne yapmamı istediğinizi söyleyin!',
+                'ücretsiz mi': 'Evet, ZekaAI tamamen ücretsizdir! Hiçbir özellik için ücret ödemeniz gerekmez.',
+                'geliştirici': 'ZekaAI, dünyanın dört bir yanındaki gönüllü geliştiriciler tarafından oluşturulmuş açık kaynaklı bir projedir.',
+                'api': 'API'mizi kullanmak için dokümantasyon sayfamızı ziyaret edebilirsiniz. Temel kullanım için ücretsiz API anahtarı alabilirsiniz.'
+            };
+            
+            sendBtn.addEventListener('click', function() {
+                sendMessage();
+            });
+            
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            function sendMessage() {
+                const message = userInput.value.trim();
+                if (message === '') return;
+                
+                // Kullanıcı mesajını ekle
+                addMessage(message, 'user');
+                userInput.value = '';
+                
+                // Yapay zekanın cevap vermesi için biraz bekle
+                setTimeout(() => {
+                    // Yapay zeka cevabını oluştur
+                    const response = generateAIResponse(message);
+                    addMessage(response, 'ai');
+                }, 600);
+            }
+            
+            function addMessage(text, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(sender === 'user' ? 'user-message' : 'ai-message');
+                messageDiv.textContent = text;
+                
+                chatContainer.appendChild(messageDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+            
+            function generateAIResponse(message) {
+                const lowerMessage = message.toLowerCase();
+                
+                // Önceden tanımlanmış yanıtları kontrol et
+                for (const [key, value] of Object.entries(aiResponses)) {
+                    if (lowerMessage.includes(key)) {
+                        return value;
+                    }
+                }
+                
+                // Rastgele yanıtlar
+                const randomResponses = [
+                    "İlginç bir soru! Bunu araştırıyorum...",
+                    "Bana öğretebileceğiniz bir şey var mı?",
+                    "Bu konuda daha fazla bilgi edinmek ister misiniz?",
+                    "Öğrenme sürecim devam ediyor, bu konuda daha fazla bilgi topluyorum...",
+                    "Kullanıcı etkileşimleri sayesinde kendimi geliştiriyorum...",
+                    "Bu sorunuz benim öğrenme veritabanıma eklendi, teşekkürler!",
+                    "Açık kaynaklı bir proje olduğum için sürekli gelişiyorum!",
+                    "Topluluk katkıları sayesinde her geçen gün daha akıllı oluyorum."
+                ];
+                
+                return randomResponses[Math.floor(Math.random() * randomResponses.length)];
+            }
+        });
+    </script>
 </body>
 </html>
-```
